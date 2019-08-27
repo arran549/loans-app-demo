@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 
 class CompanyDetails extends Component {
-    state = { 
+    state = {
         status: 'unknown'
      }
 
@@ -21,8 +21,8 @@ class CompanyDetails extends Component {
             numDirectors
         }
 
-        axios.post("http://localhost:50205/api/application/companyDetails", application).then(response => {console.log(response);})
-        
+        axios.post("https://localhost:44316/api/application/companyDetails", application).then(response => {console.log(response);})
+
     }
 
     handleChange = e => {
@@ -60,19 +60,19 @@ class CompanyDetails extends Component {
                         <Form.Control type="text" placeholder="No. directors" name="numDirectors" onChange={this.handleChange}/>
                     </Form.Group>
                     </Form.Row>
-          
+
                     <Link to={'/companyDetails'}>
                         <Button variant="primary" onClick={this.submit} type="submit">Sumbit</Button>
                     </Link>
                 </Form>
-               
+
             </Container>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    return {      
+    return {
         guid: state.applications.guid
     }
 }

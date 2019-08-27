@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { setApplicationGuid } from '../actions/application.actions'
 
 class ApplyForLoan extends Component {
-    state = { 
+    state = {
         status: 'unknown'
      }
 
@@ -24,8 +24,8 @@ class ApplyForLoan extends Component {
             password
         }
 
-        axios.post("http://localhost:50205/api/application/apply", application).then(response => {console.log(response);})
-        
+        axios.post("https://localhost:44316/api/application/apply", application).then(response => {console.log(response);})
+
     }
 
     handleChange = e => {
@@ -63,7 +63,7 @@ class ApplyForLoan extends Component {
                         <Form.Control type="text" placeholder="Last Name" name="lastName" onChange={this.handleChange}/>
                     </Form.Group>
                     </Form.Row>
-          
+
                     <Form.Group controlId="formEmail">
                         <Form.Label>Email Address</Form.Label>
                         <Form.Control type="email" placeholder="my@email.com" name="email" onChange={this.handleChange} />
@@ -79,7 +79,7 @@ class ApplyForLoan extends Component {
                         <Button variant="primary" onClick={this.apply} type="submit">Apply Now!</Button>
                     </Link>
                 </Form>
-               
+
             </Container>
         );
     }

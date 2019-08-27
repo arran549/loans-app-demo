@@ -14,7 +14,7 @@ const Green = styled.div`
 `
 
 class Workflow extends Component {
-    state = { 
+    state = {
         status: 'unknown',
         workflow: null
      }
@@ -30,7 +30,7 @@ class Workflow extends Component {
 
         const {identifier} = this.props.match.params
 
-        axios.get("http://localhost:50205/api/workflow/" + identifier).then(response => {console.log(response); this.setState({workflow: response.data})})
+        axios.get("https://localhost:44316/api/workflow/" + identifier).then(response => {console.log(response); this.setState({workflow: response.data})})
         //const identifier = props.identifier;
     }
 
@@ -42,7 +42,7 @@ class Workflow extends Component {
                 case "Failed":
                 return {backgroundColor:"red"}
             default:
-                return {backgroundColor:"white"} 
+                return {backgroundColor:"white"}
         }
     }
 
@@ -60,11 +60,11 @@ class Workflow extends Component {
         return (
         <div>
             <Status status={workflow.identifier}></Status>
-            
-            
+
+
                 <h1>{app.company}</h1>
                 <hr />
-            
+
             <Row>
             <Col sm={4}>
                 <Table striped bordered size="sm">
@@ -103,26 +103,26 @@ class Workflow extends Component {
                     <Card.Body style={this.statusColour(workflow, "StartLoan") }>
                         <Card.Title>Completed Application</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["StartLoan"]}  
+                        {workflow.stepStatusMap["StartLoan"]}
                         <p>{workflow.processResultMap["StartLoan"].message}</p>
                         </Card.Text>
                         <Link to={'/apply'}>
                             <Button variant="primary">View Info</Button>
                         </Link>
-                       
+
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '16rem' }}>
                     <Card.Body style={this.statusColour(workflow, "Boundary")}>
                         <Card.Title>Boundary Model</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["Boundary"]}  
+                        {workflow.stepStatusMap["Boundary"]}
                         <p>{workflow.processResultMap["Boundary"] && workflow.processResultMap["Boundary"].message}</p>
                         </Card.Text>
                         <Link to={'/apply'}>
                             <Button variant="primary">View Info</Button>
                         </Link>
-                       
+
                     </Card.Body>
                 </Card>
             <Card style={{ width: '16rem' }}>
@@ -130,13 +130,13 @@ class Workflow extends Component {
                     <Card.Body style={this.statusColour(workflow, "SubmitCompanyInfoToRdc") }>
                         <Card.Title>RDC Status</Card.Title>
                         <Card.Text>
-                            {workflow.stepStatusMap["SubmitCompanyInfoToRdc"]}  
+                            {workflow.stepStatusMap["SubmitCompanyInfoToRdc"]}
                             <p>{workflow.processResultMap["SubmitCompanyInfoToRdc"] && workflow.processResultMap["SubmitCompanyInfoToRdc"].message}</p>
                         </Card.Text>
                         <Link to={'/apply'}>
                             <Button variant="primary">View Info</Button>
                         </Link>
-                       
+
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '18rem' }}>
@@ -149,14 +149,14 @@ class Workflow extends Component {
                         <Link to={'/apply'}>
                             <Button variant="primary">View Info</Button>
                         </Link>
-                       
+
                     </Card.Body>
                 </Card>
                 </Row>
 
                 <br />
-                
-                    
+
+
                 <Table class="table" size="sm">
                     <thead>
                     <th>Id</th>
@@ -183,18 +183,18 @@ class Workflow extends Component {
                     <th>Id</th>
                     <th>Code</th>
                     <th>Name</th>
-                    <th>Status</th>
                     <th>Weighting</th>
+                    <th>Status</th>
                     <th>Message</th>
                     </thead>
                     <tbody>
                             { workflow.rules && workflow.rules.map(p => (
                                 <tr key={p.ruleResultId}>
                                     <td>{p.ruleResultId}</td>
-                                    <td>{p.ruleCode.codeId}</td>
-                                    <td>{p.rulesetName.name}</td>
-                                    <td>{p.status}</td>
+                                    <td>{p.ruleCode}</td>
+                                    <td>{p.rulesetName}</td>
                                     <td>{p.weighting}</td>
+                                    <td>{p.status}</td>
                                     <td>{p.message}</td>
                                 </tr>
 
