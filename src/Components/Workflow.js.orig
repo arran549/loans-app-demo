@@ -16,8 +16,14 @@ const Green = styled.div`
 `
 
 class Workflow extends Component {
+<<<<<<< HEAD
     state = {
+        status: 'unknown',
+        workflow: null
+=======
+    state = { 
         status: 'unknown'
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
      }
 
     // componentWillReceiveProps = props => {
@@ -27,15 +33,15 @@ class Workflow extends Component {
     // }
 
     trigger(identifier){
-        axios.post(`https://localhost:44316/api/workflow/${identifier}/run`).then(response => this.getWorkflow(identifier))
+        axios.post(`http://localhost:50205/api/workflow/${identifier}/run`).then(response => this.getWorkflow(identifier))
     }
 
     rdcPass(identifier){
-        axios.post(`https://localhost:44316/api/application/rdc/company/result/${identifier}`, {
+        axios.post(`http://localhost:50205/api/application/rdc/company/result/${identifier}`, {
             "company": "IWC Ltd",
             "status": "NotAlerted",
             "alerts": []
-
+            
         }).then(response => this.getWorkflow(identifier))
     }
 
@@ -44,12 +50,16 @@ class Workflow extends Component {
 
         const {identifier} = this.props.match.params
 
+<<<<<<< HEAD
+        axios.get("https://localhost:44316/api/workflow/" + identifier).then(response => {console.log(response); this.setState({workflow: response.data})})
+=======
         this.getWorkflow(identifier);
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
         //const identifier = props.identifier;
     }
 
     getWorkflow(identifier){
-        axios.get("https://localhost:44316/api/workflow/" + identifier).then(response => {console.log(response); this.props.saveWorkflow(response.data);})    }
+        axios.get("http://localhost:50205/api/workflow/" + identifier).then(response => {console.log(response); this.props.saveWorkflow(response.data);})    }
 
     statusColour(workflow, stepName) {
         const status = workflow.stepStatusMap[stepName];
@@ -77,9 +87,14 @@ class Workflow extends Component {
         return (
         <div>
             <Status status={workflow.identifier}></Status>
+<<<<<<< HEAD
+
+
+=======
             <Button onClick={() => this.trigger(workflow.identifier)} >Re-fire</Button>
             <Button onClick={() => this.rdcPass(workflow.identifier)} >RDC Result</Button>
-
+            
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
                 <h1>{app.company}</h1>
                 <hr />
 
@@ -123,7 +138,15 @@ class Workflow extends Component {
                         <Card.Text>
                         {workflow.stepStatusMap["StartLoan"]}
                         <p>{workflow.processResultMap["StartLoan"].message}</p>
+<<<<<<< HEAD
                         </Card.Text>
+                        <Link to={'/apply'}>
+                            <Button variant="primary">View Info</Button>
+                        </Link>
+
+=======
+                        </Card.Text>                       
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '17rem' }}>
@@ -133,9 +156,16 @@ class Workflow extends Component {
                         {workflow.stepStatusMap["Boundary"]}
                         <p>{workflow.processResultMap["Boundary"] && workflow.processResultMap["Boundary"].message}</p>
                         </Card.Text>
+<<<<<<< HEAD
+                        <Link to={'/apply'}>
+                            <Button variant="primary">View Info</Button>
+                        </Link>
+
+=======
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
                     </Card.Body>
                 </Card>
-
+                
                 <Card style={{ width: '17rem' }}>
                 {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
                     <Card.Body style={this.statusColour(workflow, "SubmitCompanyInfoToRdc") }>
@@ -143,16 +173,24 @@ class Workflow extends Component {
                         <Card.Text>
                             {workflow.stepStatusMap["SubmitCompanyInfoToRdc"]}
                             <p>{workflow.processResultMap["SubmitCompanyInfoToRdc"] && workflow.processResultMap["SubmitCompanyInfoToRdc"].message}</p>
+<<<<<<< HEAD
                         </Card.Text>
+                        <Link to={'/apply'}>
+                            <Button variant="primary">View Info</Button>
+                        </Link>
+
+=======
+                        </Card.Text>                       
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '17rem' }}>
                     <Card.Body style={this.statusColour(workflow, "ApproveLoan")}>
                         <Card.Title>Loan Approved</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["ApproveLoan"]}
+                        {workflow.stepStatusMap["ApproveLoan"]}  
                         <p>{workflow.processResultMap["ApproveLoan"] && workflow.processResultMap["ApproveLoan"].message}</p>
-                        </Card.Text>
+                        </Card.Text>                       
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
                     </Card.Body>
                 </Card>
                 </Row>
@@ -169,12 +207,12 @@ class Workflow extends Component {
                             { workflow && workflow.rules && workflow.processResultMap["CompaniesHouseRules"] && workflow.processResultMap["CompaniesHouseRules"].rules.map(p => (
                                 <tr key={p.ruleResultId}>
                                     <td>{p.ruleCode}</td>
-                                    <td>{p.status}</td>
+                                    <td>{p.status}</td>    
                                 </tr>
                             ))}
                             </tbody>
                         </table>
-                        </Card.Text>
+                        </Card.Text>                       
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '17rem' }}>
@@ -184,18 +222,25 @@ class Workflow extends Component {
                         {workflow.stepStatusMap["CompanyRules"] || "Not Run"}
                         <p>{workflow.processResultMap["CompanyRules"] && workflow.processResultMap["CompanyRules"].message}</p>
 
-
+                        
                         <table>
                             <tbody>
                             { workflow && workflow.rules && workflow.processResultMap["CompanyRules"] && workflow.processResultMap["CompanyRules"].rules.map(p => (
                                 <tr key={p.ruleResultId}>
                                     <td>{p.ruleCode}</td>
-                                    <td>{p.status}</td>
+                                    <td>{p.status}</td>    
                                 </tr>
                             ))}
                             </tbody>
                         </table>
                         </Card.Text>
+<<<<<<< HEAD
+                        <Link to={'/apply'}>
+                            <Button variant="primary">View Info</Button>
+                        </Link>
+
+=======
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
                     </Card.Body>
                 </Card>
                 </Row>
@@ -235,8 +280,8 @@ class Workflow extends Component {
                     <th>Id</th>
                     <th>Code</th>
                     <th>Name</th>
-                    <th>Status</th>
                     <th>Weighting</th>
+                    <th>Status</th>
                     <th>Message</th>
                     </thead>
                     <tbody>
@@ -245,8 +290,12 @@ class Workflow extends Component {
                                     <td>{p.ruleResultId}</td>
                                     <td>{p.ruleCode}</td>
                                     <td>{p.rulesetName}</td>
+<<<<<<< HEAD
+=======
                                     <td>{p.status}</td>
+>>>>>>> 8f81a8c2af6fd895880ae1fa13aa97fec4bbc644
                                     <td>{p.weighting}</td>
+                                    <td>{p.status}</td>
                                     <td>{p.message}</td>
                                 </tr>
 

@@ -4,13 +4,13 @@ import { Card, Button, Container } from 'react-bootstrap'
 import { Link, withRouter } from 'react-router-dom'
 
 class StartPage extends Component {
-    state = { 
+    state = {
         status: 'unknown'
      }
 
     componentDidMount(){
-        axios.get("http://localhost:50205/status").then(response => {console.log(response); this.setState({status: response.data})})
-        
+        axios.get("http://localhost:44316/status").then(response => {console.log(response); this.setState({status: response.data})})
+
     }
 
 
@@ -35,11 +35,11 @@ class StartPage extends Component {
                         <Link to={'/apply'}>
                             <Button variant="primary">Apply Now!</Button>
                         </Link>
-                       
+
                     </Card.Body>
                 </Card>
 
-                
+
             </Container>
         );
     }
