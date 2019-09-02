@@ -2,3 +2,5 @@ export const SET_APP_GUID = "SET_APPLICATION_GUID"
 
 export const GET_WORKFLOW = "GET_WORKFLOW"
 
+export const SAVE_WORKFLOW  = "SAVE_WORKFLOW"
+

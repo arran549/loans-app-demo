@@ -4,19 +4,20 @@ import { Table, Card, Button, Container, Form, Col, Row, Jumbotron } from 'react
 import { Link, withRouter } from 'react-router-dom'
 import { v1 as uuid } from 'uuid'
 import { connect } from 'react-redux'
-import { setApplicationGuid } from '../actions/application.actions'
+import { setApplicationGuid, saveWorkflow } from '../actions/application.actions'
 import Status from './Status'
 import styled from 'styled-components'
 import ProcessCard from './ProcessCard'
+import { identifier } from '@babel/types';
+import Example from '../Components/Example'
 
 const Green = styled.div`
  background-colour: green
 `
 
 class Workflow extends Component {
-    state = {
-        status: 'unknown',
-        workflow: null
+    state = { 
+        status: 'unknown'
      }
 
     // componentWillReceiveProps = props => {
@@ -25,14 +26,30 @@ class Workflow extends Component {
     //     axios.get("http://localhost:50205/api/workflow/" + identifier).then(response => {console.log(response); this.setState({workflow: response.data})})
     // }
 
+    trigger(identifier){
+        axios.post(`http://localhost:44316/api/workflow/${identifier}/run`).then(response => this.getWorkflow(identifier))
+    }
+
+    rdcPass(identifier){
+        axios.post(`http://localhost:44316/api/application/rdc/company/result/${identifier}`, {
+            "company": "IWC Ltd",
+            "status": "NotAlerted",
+            "alerts": []
+            
+        }).then(response => this.getWorkflow(identifier))
+    }
+
     componentDidMount(){
         console.log("props2", this.props)
 
         const {identifier} = this.props.match.params
 
-        axios.get("https://localhost:44316/api/workflow/" + identifier).then(response => {console.log(response); this.setState({workflow: response.data})})
+        this.getWorkflow(identifier);
         //const identifier = props.identifier;
     }
+
+    getWorkflow(identifier){
+        axios.get("http://localhost:44316/api/workflow/" + identifier).then(response => {console.log(response); this.props.saveWorkflow(response.data);})    }
 
     statusColour(workflow, stepName) {
         const status = workflow.stepStatusMap[stepName];
@@ -42,15 +59,15 @@ class Workflow extends Component {
                 case "Failed":
                 return {backgroundColor:"red"}
             default:
-                return {backgroundColor:"white"}
+                return {backgroundColor:"white"} 
         }
     }
 
     render() {
 
-        const workflow = this.state.workflow;
-        console.log("The workflow dto", this.state.workflow)
-        if (workflow === null || workflow.processResults == null || workflow.processResultMap == null)
+        const workflow = this.props.workflow;
+        console.log("The workflow dto", this.props.workflow)
+        if (!workflow || workflow.processResults == null || workflow.processResultMap == null)
         {
             return (<h2>Loading</h2>)
         }
@@ -60,11 +77,12 @@ class Workflow extends Component {
         return (
         <div>
             <Status status={workflow.identifier}></Status>
-
-
+            <Button onClick={() => this.trigger(workflow.identifier)} >Re-fire</Button>
+            <Button onClick={() => this.rdcPass(workflow.identifier)} >RDC Result</Button>
+            
                 <h1>{app.company}</h1>
                 <hr />
-
+            
             <Row>
             <Col sm={4}>
                 <Table striped bordered size="sm">
@@ -99,78 +117,112 @@ class Workflow extends Component {
                 </Col>
             </Row>
             <Row>
-                <Card style={{ width: '16rem' }}>
+                <Card style={{ width: '17rem' }}>
                     <Card.Body style={this.statusColour(workflow, "StartLoan") }>
                         <Card.Title>Completed Application</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["StartLoan"]}
+                        {workflow.stepStatusMap["StartLoan"]}  
                         <p>{workflow.processResultMap["StartLoan"].message}</p>
-                        </Card.Text>
-                        <Link to={'/apply'}>
-                            <Button variant="primary">View Info</Button>
-                        </Link>
-
+                        </Card.Text>                       
                     </Card.Body>
                 </Card>
-                <Card style={{ width: '16rem' }}>
+                <Card style={{ width: '17rem' }}>
                     <Card.Body style={this.statusColour(workflow, "Boundary")}>
                         <Card.Title>Boundary Model</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["Boundary"]}
+                        {workflow.stepStatusMap["Boundary"]}  
                         <p>{workflow.processResultMap["Boundary"] && workflow.processResultMap["Boundary"].message}</p>
                         </Card.Text>
-                        <Link to={'/apply'}>
-                            <Button variant="primary">View Info</Button>
-                        </Link>
-
                     </Card.Body>
                 </Card>
-            <Card style={{ width: '16rem' }}>
+                
+                <Card style={{ width: '17rem' }}>
                 {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
                     <Card.Body style={this.statusColour(workflow, "SubmitCompanyInfoToRdc") }>
                         <Card.Title>RDC Status</Card.Title>
                         <Card.Text>
-                            {workflow.stepStatusMap["SubmitCompanyInfoToRdc"]}
+                            {workflow.stepStatusMap["SubmitCompanyInfoToRdc"]}  
                             <p>{workflow.processResultMap["SubmitCompanyInfoToRdc"] && workflow.processResultMap["SubmitCompanyInfoToRdc"].message}</p>
-                        </Card.Text>
-                        <Link to={'/apply'}>
-                            <Button variant="primary">View Info</Button>
-                        </Link>
-
+                        </Card.Text>                       
                     </Card.Body>
                 </Card>
-                <Card style={{ width: '18rem' }}>
+                <Card style={{ width: '17rem' }}>
+                    <Card.Body style={this.statusColour(workflow, "ApproveLoan")}>
+                        <Card.Title>Loan Approved</Card.Title>
+                        <Card.Text>
+                        {workflow.stepStatusMap["ApproveLoan"]}  
+                        <p>{workflow.processResultMap["ApproveLoan"] && workflow.processResultMap["ApproveLoan"].message}</p>
+                        </Card.Text>                       
+                    </Card.Body>
+                </Card>
+                </Row>
+                <Row>
+                <Card style={{ width: '17rem' }}>
                     <Card.Body style={this.statusColour(workflow, "CompaniesHouseRules")}>
                         <Card.Title>Companies House</Card.Title>
                         <Card.Text>
                         {workflow.stepStatusMap["CompaniesHouseRules"] || "Not Run"}
                         <p>{workflow.processResultMap["CompaniesHouseRules"] && workflow.processResultMap["CompaniesHouseRules"].message}</p>
-                        </Card.Text>
-                        <Link to={'/apply'}>
-                            <Button variant="primary">View Info</Button>
-                        </Link>
 
+                        <table>
+                            <tbody>
+                            { workflow && workflow.rules && workflow.processResultMap["CompaniesHouseRules"] && workflow.processResultMap["CompaniesHouseRules"].rules.map(p => (
+                                <tr key={p.ruleResultId}>
+                                    <td>{p.ruleCode}</td>
+                                    <td>{p.status}</td>    
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                        </Card.Text>                       
+                    </Card.Body>
+                </Card>
+                <Card style={{ width: '17rem' }}>
+                    <Card.Body style={this.statusColour(workflow, "CompanyRules")}>
+                        <Card.Title>Company Rules</Card.Title>
+                        <Card.Text>
+                        {workflow.stepStatusMap["CompanyRules"] || "Not Run"}
+                        <p>{workflow.processResultMap["CompanyRules"] && workflow.processResultMap["CompanyRules"].message}</p>
+
+                        
+                        <table>
+                            <tbody>
+                            { workflow && workflow.rules && workflow.processResultMap["CompanyRules"] && workflow.processResultMap["CompanyRules"].rules.map(p => (
+                                <tr key={p.ruleResultId}>
+                                    <td>{p.ruleCode}</td>
+                                    <td>{p.status}</td>    
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                        </Card.Text>
                     </Card.Body>
                 </Card>
                 </Row>
 
                 <br />
-
-
+                
+                    
                 <Table class="table" size="sm">
                     <thead>
                     <th>Id</th>
                     <th>Step</th>
                     <th>Status</th>
                     <th>Message</th>
+                    <th>Rules</th>
+                    <th></th>
+                    <th></th>
                     </thead>
                     <tbody>
-                            { workflow.processResults && workflow.processResults.map(p => (
+                            { workflow && workflow.processResults && workflow.processResults.map(p => (
                                 <tr key={p.processResultId}>
                                     <td>{p.processResultId}</td>
                                     <td>{p.stepName}</td>
                                     <td><div>{p.status}<Status /></div></td>
                                     <td>{p.message}</td>
+                                    <td>{p.ruleCount}</td>
+                                    <td>{p.processingNotes.length} </td>
+                                    <Example notes={p.processingNotes} />
                                 </tr>
 
                             ))}
@@ -183,18 +235,18 @@ class Workflow extends Component {
                     <th>Id</th>
                     <th>Code</th>
                     <th>Name</th>
-                    <th>Weighting</th>
                     <th>Status</th>
+                    <th>Weighting</th>
                     <th>Message</th>
                     </thead>
                     <tbody>
-                            { workflow.rules && workflow.rules.map(p => (
+                            { workflow && workflow.rules && workflow.rules.map(p => (
                                 <tr key={p.ruleResultId}>
                                     <td>{p.ruleResultId}</td>
                                     <td>{p.ruleCode}</td>
                                     <td>{p.rulesetName}</td>
-                                    <td>{p.weighting}</td>
                                     <td>{p.status}</td>
+                                    <td>{p.weighting}</td>
                                     <td>{p.message}</td>
                                 </tr>
 
@@ -209,12 +261,13 @@ class Workflow extends Component {
 const mapStateToProps = (state) => {
     console.log('state - applications', state.applications)
     return {
-        //guid: state.applications.guid
+        workflow: state.applications.workflow//guid: state.applications.guid
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        saveWorkflow: (workflow) => dispatch(saveWorkflow(workflow))
         //setAppGuid: (guid) => dispatch(setApplicationGuid(guid))
     }
 }
