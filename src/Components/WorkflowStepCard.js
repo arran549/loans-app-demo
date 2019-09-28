@@ -4,6 +4,7 @@ import { v1 as uuid } from 'uuid'
 import { connect } from 'react-redux'
 import { Table, Card, Button, Container, Form, Col, Row, Jumbotron } from 'react-bootstrap'
 import { race } from 'q';
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
 class WorkflowStepCard extends Component {
@@ -12,12 +13,23 @@ class WorkflowStepCard extends Component {
     statusColour(workflow, stepName) {
         const status = workflow.stepStatusMap[stepName];
         switch(status){
-            case "Succeeded":
-                return {backgroundColor:"#8BC341"}
-                case "Failed":
-                return {backgroundColor:"red"}
+            // case "Succeeded":
+            //     return {backgroundColor:"#8BC341"}
+            //     case "Failed":
+            //     return {backgroundColor:"red"}
             default:
                 return {backgroundColor:"white"}
+        }
+    }
+
+    stepStatusIcon(stepStatus, stepName) {
+        switch(stepStatus){
+            case "Succeeded":
+                 return <><FaCheckCircle size={28} color='#8BC341' /> {stepName}</>
+            case "Failed":
+                 return <><FaTimesCircle size={28} color='red' /> {stepName}</>
+            default:
+                return <><FaCheckCircle size={28} color='#8BC341' /> {stepName}}</>//{backgroundColor:"white"}
         }
     }
 
@@ -35,6 +47,7 @@ class WorkflowStepCard extends Component {
             <tbody>
             { workflow && workflow.rules && workflow.processResultMap[stepName] && workflow.processResultMap[stepName].rules.map(p => (
                 <tr key={p.ruleResultId}>
+                    <td>{p.ruleCode}</td>
                     <td>{p.message}</td>
                     <td>{p.status}</td>
                 </tr>
@@ -46,11 +59,16 @@ class WorkflowStepCard extends Component {
             rules = ("No rules")
         }
 
+        const stepStatus  = workflow.stepStatusMap[stepName];
+
         return (
             <Card style={{ width: '100%' }}>
             <Card.Body style={this.statusColour(workflow, stepName)}>
-                <Card.Title>{stepName}</Card.Title>
-                <Card.Text>
+                <Card.Title style={{ backgroundColor: '#f0f3f7', padding: '10px'}}>
+                    {this.stepStatusIcon(stepStatus, stepName)}
+                </Card.Title>
+                
+                <Card.Text style={{border: '1px solid gray', padding: '10px'}}>
                 {workflow.stepStatusMap[stepName] || "Not Run"}
                 <p>{workflow.processResultMap[stepName] && workflow.processResultMap[stepName].message}</p>
 
