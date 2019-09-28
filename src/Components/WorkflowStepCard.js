@@ -35,7 +35,7 @@ class WorkflowStepCard extends Component {
             <tbody>
             { workflow && workflow.rules && workflow.processResultMap[stepName] && workflow.processResultMap[stepName].rules.map(p => (
                 <tr key={p.ruleResultId}>
-                    <td>{p.ruleCode}</td>
+                    <td>{p.message}</td>
                     <td>{p.status}</td>
                 </tr>
             ))}
@@ -47,7 +47,7 @@ class WorkflowStepCard extends Component {
         }
 
         return (
-            <Card style={{ width: '17rem' }}>
+            <Card style={{ width: '100%' }}>
             <Card.Body style={this.statusColour(workflow, stepName)}>
                 <Card.Title>{stepName}</Card.Title>
                 <Card.Text>

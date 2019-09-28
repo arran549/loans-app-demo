@@ -119,10 +119,9 @@ class Workflow extends Component {
             </Row>
             
             <Row>
-                <WorkflowStepCard stepName="CompanyValidation" />
-                <WorkflowStepCard stepName="ReferLoanApplication" />
-                <WorkflowStepCard stepName="RejectLoanApplication" />
-                <WorkflowStepCard stepName="CreditSafeRules" />
+                {workflow && workflow.stepStatusMap && Object.keys(workflow.stepStatusMap).map(stepName => (
+                    <WorkflowStepCard stepName={stepName} />    
+                ))}
             </Row>
             <br />
             <Table class="table" size="sm">
