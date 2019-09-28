@@ -123,56 +123,6 @@ class Workflow extends Component {
                     <WorkflowStepCard stepName={stepName} />    
                 ))}
             </Row>
-            <br />
-            <Table class="table" size="sm">
-                <thead>
-                <th>Id</th>
-                <th>Step</th>
-                <th>Status</th>
-                <th>Message</th>
-                <th>Rules</th>
-                <th></th>
-                <th></th>
-                </thead>
-                <tbody>
-                    { workflow && workflow.processResults && workflow.processResults.map(p => (
-                        <tr key={p.processResultId}>
-                            <td>{p.processResultId}</td>
-                            <td>{p.stepName}</td>
-                            <td><div>{p.status}<Status /></div></td>
-                            <td>{p.message}</td>
-                            <td>{p.ruleCount}</td>
-                            <td>{p.processingNotes.length} </td>
-                            <ViewNotes notes={p.processingNotes} />
-                        </tr>
-
-                    ))}
-                </tbody>
-            </Table>
-            <br />
-            <Table class="table" size="sm">
-                <thead>
-                <th>Id</th>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Weighting</th>
-                <th>Message</th>
-                </thead>
-                <tbody>
-                        { workflow && workflow.rules && workflow.rules.map(p => (
-                            <tr key={p.ruleResultId}>
-                                <td>{p.ruleResultId}</td>
-                                <td>{p.ruleCode}</td>
-                                <td>{p.rulesetName}</td>
-                                <td>{p.status}</td>
-                                <td>{p.weighting}</td>
-                                <td>{p.message}</td>
-                            </tr>
-
-                        ))}
-                    </tbody>
-                </Table>
         </div>
         )
     }

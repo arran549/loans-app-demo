@@ -40,26 +40,23 @@ class WorkflowStepCard extends Component {
         console.log('Workflow', workflow)
         const { stepName } = this.props;
 
-        let rules;
         let rules2;
 
         let processResult = workflow.processResultMap[stepName]
 
-        if(workflow.rules.length > 0){
+        if(processResult.rules.length > 0){
                         
             rules2 = (
                 <Table class="table" size="sm">
                 <thead>
-                <th>Id</th>
                 <th>Code</th>
                 <th>Weighting</th>
                 <th>Message</th>
                 <th>Status</th>
                 </thead>
                 <tbody>
-                        { workflow && workflow.rules && workflow.rules.map(p => (
+                        { processResult && processResult.rules && processResult.rules.map(p => (
                             <tr key={p.ruleResultId}>
-                                <td>{p.ruleResultId}</td>
                                 <td>{p.ruleCode}</td>
                                 <td>{p.weighting}</td>
                                 <td>{p.message}</td>
@@ -71,27 +68,29 @@ class WorkflowStepCard extends Component {
                 </Table>
             )
         }
-        else{
-            rules = ("No rules")
-        }
 
         const stepStatus = workflow.stepStatusMap[stepName] || "Not Run";
+
+        let cardTitle = (
+            <Card.Title style={{ backgroundColor: '#f0f3f7', padding: '10px'}}>
+                {this.stepStatusIcon(stepStatus, stepName)} 
+            </Card.Title>
+            )
+
+        let cardText = (
+            <Card.Text style={{border: '1px solid gray', padding: '10px'}}>
+                <ViewNotes title={stepName} notes={processResult.processingNotes}/>
+                <p>{workflow.processResultMap[stepName] && workflow.processResultMap[stepName].message}</p>
+        
+                {rules2}
+            </Card.Text>
+        )
 
         return (
             <Card style={{ width: '100%' }}>
             <Card.Body style={this.statusColour(workflow, stepName)}>
-                <Card.Title style={{ backgroundColor: '#f0f3f7', padding: '10px'}}>
-                    {this.stepStatusIcon(stepStatus, stepName)} 
-                </Card.Title>
-                
-                <Card.Text style={{border: '1px solid gray', padding: '10px'}}>
-                <ViewNotes title={stepName} notes={processResult.processingNotes}/>
-                <p>{workflow.processResultMap[stepName] && workflow.processResultMap[stepName].message}</p>
-                
-
-                {rules2}
-
-                </Card.Text>
+                {cardTitle}
+                {cardText}
             </Card.Body>
         </Card>
         )
