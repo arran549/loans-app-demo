@@ -9,7 +9,7 @@ import Status from './Status'
 import styled from 'styled-components'
 import ProcessCard from './ProcessCard'
 import { identifier } from '@babel/types';
-import Example from '../Components/Example'
+import ViewNotes from '../Components/ViewNotes'
 import WorkflowStepCard from './WorkflowStepCard'
 
 const Green = styled.div`
@@ -143,7 +143,7 @@ class Workflow extends Component {
                             <td>{p.message}</td>
                             <td>{p.ruleCount}</td>
                             <td>{p.processingNotes.length} </td>
-                            <Example notes={p.processingNotes} />
+                            <ViewNotes notes={p.processingNotes} />
                         </tr>
 
                     ))}

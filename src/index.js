@@ -8,7 +8,7 @@ import StartPage from './Components/StartPage'
 import ApplyForLoan from './Components/ApplyForLoan'
 import CompanyDetails from './Components/CompanyDetails'
 import Workflow from './Components/Workflow'
-import Example from './Components/Example'
+import ViewNotes from './Components/ViewNotes'
 
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
@@ -37,7 +37,7 @@ const routing = (
                     <Route path="/start" component={StartPage} />
                     <Route path="/apply" component={ApplyForLoan} />
                     <Route path="/companyDetails" component={CompanyDetails} />
-                    <Route exact path="/workflow/:identifier/Modal" component={Example} />
+                    <Route exact path="/workflow/:identifier/Modal" component={ViewNotes} />
                     <Route exact path="/workflow/:identifier" component={Workflow} />
                     
 

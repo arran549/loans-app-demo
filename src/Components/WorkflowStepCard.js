@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { Table, Card, Button, Container, Form, Col, Row, Jumbotron } from 'react-bootstrap'
 import { race } from 'q';
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import ViewNotes from './ViewNotes';
 
 
 class WorkflowStepCard extends Component {
@@ -36,43 +37,59 @@ class WorkflowStepCard extends Component {
     render() {
 
         const workflow = this.props.workflow;
-
+        console.log('Workflow', workflow)
         const { stepName } = this.props;
 
         let rules;
+        let rules2;
+
+        let processResult = workflow.processResultMap[stepName]
 
         if(workflow.rules.length > 0){
-                            
-            rules = (<table>
-            <tbody>
-            { workflow && workflow.rules && workflow.processResultMap[stepName] && workflow.processResultMap[stepName].rules.map(p => (
-                <tr key={p.ruleResultId}>
-                    <td>{p.ruleCode}</td>
-                    <td>{p.message}</td>
-                    <td>{p.status}</td>
-                </tr>
-            ))}
-            </tbody>
-            </table>)
+                        
+            rules2 = (
+                <Table class="table" size="sm">
+                <thead>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Weighting</th>
+                <th>Message</th>
+                <th>Status</th>
+                </thead>
+                <tbody>
+                        { workflow && workflow.rules && workflow.rules.map(p => (
+                            <tr key={p.ruleResultId}>
+                                <td>{p.ruleResultId}</td>
+                                <td>{p.ruleCode}</td>
+                                <td>{p.weighting}</td>
+                                <td>{p.message}</td>
+                                <td>{p.status}</td>
+                            </tr>
+
+                        ))}
+                    </tbody>
+                </Table>
+            )
         }
         else{
             rules = ("No rules")
         }
 
-        const stepStatus  = workflow.stepStatusMap[stepName];
+        const stepStatus = workflow.stepStatusMap[stepName] || "Not Run";
 
         return (
             <Card style={{ width: '100%' }}>
             <Card.Body style={this.statusColour(workflow, stepName)}>
                 <Card.Title style={{ backgroundColor: '#f0f3f7', padding: '10px'}}>
-                    {this.stepStatusIcon(stepStatus, stepName)}
+                    {this.stepStatusIcon(stepStatus, stepName)} 
                 </Card.Title>
                 
                 <Card.Text style={{border: '1px solid gray', padding: '10px'}}>
-                {workflow.stepStatusMap[stepName] || "Not Run"}
+                <ViewNotes title={stepName} notes={processResult.processingNotes}/>
                 <p>{workflow.processResultMap[stepName] && workflow.processResultMap[stepName].message}</p>
+                
 
-                {rules}
+                {rules2}
 
                 </Card.Text>
             </Card.Body>

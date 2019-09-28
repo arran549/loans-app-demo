@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Modal, Button} from 'react-bootstrap'
 
-function Example(props) {
+function ViewNotes(props) {
     const [show, setShow] = useState(false);
   
     const handleClose = () => setShow(false);
@@ -9,13 +9,13 @@ function Example(props) {
   
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>
+        <Button variant="primary" onClick={handleShow} style={{float: 'right'}}>
           Notes 
         </Button>
   
         <Modal show={show} onHide={handleClose} >
           <Modal.Header closeButton>
-            <Modal.Title>Processing Notes {props.notes.length}</Modal.Title>
+            <Modal.Title>{props.title}: Processing Notes</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {props.notes.map((note) => (
@@ -35,5 +35,4 @@ function Example(props) {
     );
   }
   
-  export default Example
-  //render(<Example />);
+  export default ViewNotes
