@@ -117,144 +117,63 @@ class Workflow extends Component {
 
                 </Col>
             </Row>
+            
             <Row>
-                <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "CompanyValidation") }>
-                        <Card.Title>Completed Application</Card.Title>
-                        <Card.Text>
-                        {workflow.stepStatusMap["CompanyValidation"]}
-                        <p>{workflow.processResultMap["CompanyValidation"].message}</p>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "CreditSafeRules")}>
-                        <Card.Title>Boundary Model</Card.Title>
-                        <Card.Text>
-                        {workflow.stepStatusMap["CreditSafeRules"]}
-                        <p>{workflow.processResultMap["CreditSafeRules"] && workflow.processResultMap["CreditSafeRules"].message}</p>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-
-                <Card style={{ width: '17rem' }}>
-                {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-                    <Card.Body style={this.statusColour(workflow, "RejectLoanApplication") }>
-                        <Card.Title>RDC Status</Card.Title>
-                        <Card.Text>
-                            {workflow.stepStatusMap["RejectLoanApplication"]}
-                            <p>{workflow.processResultMap["RejectLoanApplication"] && workflow.processResultMap["RejectLoanApplication"].message}</p>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "ReferLoanApplication")}>
-                        <Card.Title>Loan Approved</Card.Title>
-                        <Card.Text>
-                        {workflow.stepStatusMap["ReferLoanApplication"]}
-                        <p>{workflow.processResultMap["ReferLoanApplication"] && workflow.processResultMap["ReferLoanApplication"].message}</p>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </Row>
-                <Row>
-                <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "CreditSafeRules")}>
-                        <Card.Title>Companies House</Card.Title>
-                        <Card.Text>
-                        {workflow.stepStatusMap["CreditSafeRules"] || "Not Run"}
-                        <p>{workflow.processResultMap["CreditSafeRules"] && workflow.processResultMap["CreditSafeRules"].message}</p>
-
-                        <table>
-                            <tbody>
-                            { workflow && workflow.rules && workflow.processResultMap["CreditSafeRules"] && workflow.processResultMap["CreditSafeRules"].rules.map(p => (
-                                <tr key={p.ruleResultId}>
-                                    <td>{p.ruleCode}</td>
-                                    <td>{p.status}</td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                <WorkflowStepCard stepName="CompanyValidation" />
+                <WorkflowStepCard stepName="ReferLoanApplication" />
+                <WorkflowStepCard stepName="RejectLoanApplication" />
                 <WorkflowStepCard stepName="CreditSafeRules" />
-                {/* <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "CompanyRules")}>
-                        <Card.Title>Company Rules</Card.Title>
-                        <Card.Text>
-                        {workflow.stepStatusMap["CompanyRules"] || "Not Run"}
-                        <p>{workflow.processResultMap["CompanyRules"] && workflow.processResultMap["CompanyRules"].message}</p>
+            </Row>
+            <br />
+            <Table class="table" size="sm">
+                <thead>
+                <th>Id</th>
+                <th>Step</th>
+                <th>Status</th>
+                <th>Message</th>
+                <th>Rules</th>
+                <th></th>
+                <th></th>
+                </thead>
+                <tbody>
+                    { workflow && workflow.processResults && workflow.processResults.map(p => (
+                        <tr key={p.processResultId}>
+                            <td>{p.processResultId}</td>
+                            <td>{p.stepName}</td>
+                            <td><div>{p.status}<Status /></div></td>
+                            <td>{p.message}</td>
+                            <td>{p.ruleCount}</td>
+                            <td>{p.processingNotes.length} </td>
+                            <Example notes={p.processingNotes} />
+                        </tr>
 
+                    ))}
+                </tbody>
+            </Table>
+            <br />
+            <Table class="table" size="sm">
+                <thead>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Weighting</th>
+                <th>Message</th>
+                </thead>
+                <tbody>
+                        { workflow && workflow.rules && workflow.rules.map(p => (
+                            <tr key={p.ruleResultId}>
+                                <td>{p.ruleResultId}</td>
+                                <td>{p.ruleCode}</td>
+                                <td>{p.rulesetName}</td>
+                                <td>{p.status}</td>
+                                <td>{p.weighting}</td>
+                                <td>{p.message}</td>
+                            </tr>
 
-                        <table>
-                            <tbody>
-                            { workflow && workflow.rules && workflow.processResultMap["CompanyRules"] && workflow.processResultMap["CompanyRules"].rules.map(p => (
-                                <tr key={p.ruleResultId}>
-                                    <td>{p.ruleCode}</td>
-                                    <td>{p.status}</td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                        </Card.Text>
-                    </Card.Body>
-                </Card> */}
-                </Row>
-
-                <br />
-
-
-                <Table class="table" size="sm">
-                    <thead>
-                    <th>Id</th>
-                    <th>Step</th>
-                    <th>Status</th>
-                    <th>Message</th>
-                    <th>Rules</th>
-                    <th></th>
-                    <th></th>
-                    </thead>
-                    <tbody>
-                            { workflow && workflow.processResults && workflow.processResults.map(p => (
-                                <tr key={p.processResultId}>
-                                    <td>{p.processResultId}</td>
-                                    <td>{p.stepName}</td>
-                                    <td><div>{p.status}<Status /></div></td>
-                                    <td>{p.message}</td>
-                                    <td>{p.ruleCount}</td>
-                                    <td>{p.processingNotes.length} </td>
-                                    <Example notes={p.processingNotes} />
-                                </tr>
-
-                            ))}
-                        </tbody>
-                    </Table>
-
-                        <br />
-                <Table class="table" size="sm">
-                    <thead>
-                    <th>Id</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Weighting</th>
-                    <th>Message</th>
-                    </thead>
-                    <tbody>
-                            { workflow && workflow.rules && workflow.rules.map(p => (
-                                <tr key={p.ruleResultId}>
-                                    <td>{p.ruleResultId}</td>
-                                    <td>{p.ruleCode}</td>
-                                    <td>{p.rulesetName}</td>
-                                    <td>{p.status}</td>
-                                    <td>{p.weighting}</td>
-                                    <td>{p.message}</td>
-                                </tr>
-
-                            ))}
-                        </tbody>
-                    </Table>
+                        ))}
+                    </tbody>
+                </Table>
         </div>
         )
     }

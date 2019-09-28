@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { v1 as uuid } from 'uuid'
 import { connect } from 'react-redux'
 import { Table, Card, Button, Container, Form, Col, Row, Jumbotron } from 'react-bootstrap'
+import { race } from 'q';
 
 
 class WorkflowStepCard extends Component {
@@ -26,24 +27,35 @@ class WorkflowStepCard extends Component {
 
         const { stepName } = this.props;
 
+        let rules;
+
+        if(workflow.rules.length > 0){
+                            
+            rules = (<table>
+            <tbody>
+            { workflow && workflow.rules && workflow.processResultMap[stepName] && workflow.processResultMap[stepName].rules.map(p => (
+                <tr key={p.ruleResultId}>
+                    <td>{p.ruleCode}</td>
+                    <td>{p.status}</td>
+                </tr>
+            ))}
+            </tbody>
+            </table>)
+        }
+        else{
+            rules = ("No rules")
+        }
+
         return (
             <Card style={{ width: '17rem' }}>
             <Card.Body style={this.statusColour(workflow, stepName)}>
-                <Card.Title>Step Card</Card.Title>
+                <Card.Title>{stepName}</Card.Title>
                 <Card.Text>
                 {workflow.stepStatusMap[stepName] || "Not Run"}
                 <p>{workflow.processResultMap[stepName] && workflow.processResultMap[stepName].message}</p>
 
-                <table>
-                    <tbody>
-                    { workflow && workflow.rules && workflow.processResultMap[stepName] && workflow.processResultMap[stepName].rules.map(p => (
-                        <tr key={p.ruleResultId}>
-                            <td>{p.ruleCode}</td>
-                            <td>{p.status}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+                {rules}
+
                 </Card.Text>
             </Card.Body>
         </Card>
