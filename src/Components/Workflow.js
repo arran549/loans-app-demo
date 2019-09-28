@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import ProcessCard from './ProcessCard'
 import { identifier } from '@babel/types';
 import Example from '../Components/Example'
+import WorkflowStepCard from './WorkflowStepCard'
 
 const Green = styled.div`
  background-colour: green
@@ -27,7 +28,7 @@ class Workflow extends Component {
     // }
 
     trigger(identifier){
-        axios.post(`https://localhost:44316/api/workflow/${identifier}/run`).then(response => this.getWorkflow(identifier))
+        axios.post(`https://localhost:50705/api/workflow/${identifier}/run`).then(response => this.getWorkflow(identifier))
     }
 
     rdcPass(identifier){
@@ -49,7 +50,7 @@ class Workflow extends Component {
     }
 
     getWorkflow(identifier){
-        axios.get("https://localhost:44316/api/workflow/" + identifier).then(response => {console.log(response); this.props.saveWorkflow(response.data);})    }
+        axios.get("http://localhost:50705/api/workflow/" + identifier).then(response => {console.log(response); this.props.saveWorkflow(response.data);})    }
 
     statusColour(workflow, stepName) {
         const status = workflow.stepStatusMap[stepName];
@@ -118,55 +119,55 @@ class Workflow extends Component {
             </Row>
             <Row>
                 <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "StartLoan") }>
+                    <Card.Body style={this.statusColour(workflow, "CompanyValidation") }>
                         <Card.Title>Completed Application</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["StartLoan"]}
-                        <p>{workflow.processResultMap["StartLoan"].message}</p>
+                        {workflow.stepStatusMap["CompanyValidation"]}
+                        <p>{workflow.processResultMap["CompanyValidation"].message}</p>
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "Boundary")}>
+                    <Card.Body style={this.statusColour(workflow, "CreditSafeRules")}>
                         <Card.Title>Boundary Model</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["Boundary"]}
-                        <p>{workflow.processResultMap["Boundary"] && workflow.processResultMap["Boundary"].message}</p>
+                        {workflow.stepStatusMap["CreditSafeRules"]}
+                        <p>{workflow.processResultMap["CreditSafeRules"] && workflow.processResultMap["CreditSafeRules"].message}</p>
                         </Card.Text>
                     </Card.Body>
                 </Card>
 
                 <Card style={{ width: '17rem' }}>
                 {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-                    <Card.Body style={this.statusColour(workflow, "SubmitCompanyInfoToRdc") }>
+                    <Card.Body style={this.statusColour(workflow, "RejectLoanApplication") }>
                         <Card.Title>RDC Status</Card.Title>
                         <Card.Text>
-                            {workflow.stepStatusMap["SubmitCompanyInfoToRdc"]}
-                            <p>{workflow.processResultMap["SubmitCompanyInfoToRdc"] && workflow.processResultMap["SubmitCompanyInfoToRdc"].message}</p>
+                            {workflow.stepStatusMap["RejectLoanApplication"]}
+                            <p>{workflow.processResultMap["RejectLoanApplication"] && workflow.processResultMap["RejectLoanApplication"].message}</p>
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "ApproveLoan")}>
+                    <Card.Body style={this.statusColour(workflow, "ReferLoanApplication")}>
                         <Card.Title>Loan Approved</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["ApproveLoan"]}
-                        <p>{workflow.processResultMap["ApproveLoan"] && workflow.processResultMap["ApproveLoan"].message}</p>
+                        {workflow.stepStatusMap["ReferLoanApplication"]}
+                        <p>{workflow.processResultMap["ReferLoanApplication"] && workflow.processResultMap["ReferLoanApplication"].message}</p>
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </Row>
                 <Row>
                 <Card style={{ width: '17rem' }}>
-                    <Card.Body style={this.statusColour(workflow, "CompaniesHouseRules")}>
+                    <Card.Body style={this.statusColour(workflow, "CreditSafeRules")}>
                         <Card.Title>Companies House</Card.Title>
                         <Card.Text>
-                        {workflow.stepStatusMap["CompaniesHouseRules"] || "Not Run"}
-                        <p>{workflow.processResultMap["CompaniesHouseRules"] && workflow.processResultMap["CompaniesHouseRules"].message}</p>
+                        {workflow.stepStatusMap["CreditSafeRules"] || "Not Run"}
+                        <p>{workflow.processResultMap["CreditSafeRules"] && workflow.processResultMap["CreditSafeRules"].message}</p>
 
                         <table>
                             <tbody>
-                            { workflow && workflow.rules && workflow.processResultMap["CompaniesHouseRules"] && workflow.processResultMap["CompaniesHouseRules"].rules.map(p => (
+                            { workflow && workflow.rules && workflow.processResultMap["CreditSafeRules"] && workflow.processResultMap["CreditSafeRules"].rules.map(p => (
                                 <tr key={p.ruleResultId}>
                                     <td>{p.ruleCode}</td>
                                     <td>{p.status}</td>
@@ -177,7 +178,8 @@ class Workflow extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card style={{ width: '17rem' }}>
+                <WorkflowStepCard stepName="CreditSafeRules" />
+                {/* <Card style={{ width: '17rem' }}>
                     <Card.Body style={this.statusColour(workflow, "CompanyRules")}>
                         <Card.Title>Company Rules</Card.Title>
                         <Card.Text>
@@ -197,7 +199,7 @@ class Workflow extends Component {
                         </table>
                         </Card.Text>
                     </Card.Body>
-                </Card>
+                </Card> */}
                 </Row>
 
                 <br />
